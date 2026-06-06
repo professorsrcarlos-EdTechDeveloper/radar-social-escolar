@@ -755,3 +755,49 @@ body:not(.logado){
     margin-top:8px!important;
   }
 }
+
+/* v3.5 - Login direto: sem senha, sem modal e sem dependência de arrasto */
+.login-card .btn-sisme{
+  display:block!important;
+  width:100%!important;
+  min-height:54px!important;
+  font-size:18px!important;
+}
+body:not(.logado) .topbar,
+body:not(.logado) .app,
+body:not(.logado) .alerta-flutuante,
+body:not(.logado) .toast{
+  display:none!important;
+}
+body.logado .login-overlay{
+  display:none!important;
+}
+.login-overlay{
+  position:static!important;
+  display:block!important;
+  width:100%!important;
+  min-height:100vh!important;
+  min-height:100dvh!important;
+  overflow:visible!important;
+  padding:10px!important;
+}
+.login-card{
+  position:static!important;
+  transform:none!important;
+  width:min(430px,100%)!important;
+  max-width:430px!important;
+  margin:0 auto!important;
+}
+@media(max-width:700px), (pointer:coarse){
+  .login-overlay{padding:8px!important}
+  .login-card{
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+    padding:14px!important;
+  }
+  .login-logo,.login-permissao-info{display:none!important}
+  .login-card h2{font-size:20px!important;margin:0 0 6px!important}
+  .login-card p{font-size:12px!important;margin:0 0 10px!important}
+  .login-card select{font-size:16px!important;padding:12px!important}
+}

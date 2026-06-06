@@ -849,6 +849,7 @@ function aplicarLoginMobileDefinitivo(){
 
 function configurarLogin(){
   const sessao=localStorage.getItem('radarSessaoAtiva');
+  document.body.classList.remove('logado');
   if(sessao && USUARIOS_SISTEMA[sessao]){
     aplicarUsuario(sessao);
   }else{
@@ -863,8 +864,8 @@ function configurarLogin(){
 }
 function entrarSistema(){
   const user=$('loginUsuario')?.value||'secretaria';
-  const senha=$('loginSenha')?.value||'';
-  if(senha!=='1234') return toast('Senha incorreta. Use 1234 na versão de teste.');
+  const senha=$('loginSenha')?.value||'1234';
+  /* v3.5: senha removida para teste em celular */
   localStorage.setItem('radarSessaoAtiva',user);
   aplicarUsuario(user);
   window.scrollTo(0,0); toast('Acesso liberado: '+USUARIOS_SISTEMA[user].perfil);
@@ -1009,7 +1010,7 @@ function gerarDadosTela(){
   const dados=dadosFiltrados(tipo);
   const titulo=$('dadosTipo').options[$('dadosTipo').selectedIndex].text;
   const ind=indicadoresDadosGerais();
-  let html=`<h3>${titulo} — Radar Social Escolar 3.4</h3><div class="perfil-alerta"><b>Perfil:</b> ${$('usuarioAtivoTopo')?.textContent||'-'}<br><b>Permissão:</b> ${usuarioAtual()?.permissao||'-'}</div><p><b>Data:</b> ${fmt(hoje)}</p>${dashboardsDadosHTML(ind)}`;
+  let html=`<h3>${titulo} — Radar Social Escolar 3.5</h3><div class="perfil-alerta"><b>Perfil:</b> ${$('usuarioAtivoTopo')?.textContent||'-'}<br><b>Permissão:</b> ${usuarioAtual()?.permissao||'-'}</div><p><b>Data:</b> ${fmt(hoje)}</p>${dashboardsDadosHTML(ind)}`;
   if(tipo==='alunos'){
     html+=`<table><tr><th>Aluno</th><th>Turma</th><th>Responsável</th><th>Telefone</th><th>Contatos</th></tr>${dados.map(a=>`<tr><td>${a.nome}</td><td>${a.turma}</td><td>${a.responsavel||'-'}</td><td>${a.telefone||'-'}</td><td>${(a.contatos||[]).length}</td></tr>`).join('')||'<tr><td colspan="5">Sem dados.</td></tr>'}</table>`;
   }else{
@@ -1022,7 +1023,7 @@ function gerarResumoGeralDados(){
   const regs=regsMes(m), pres=regs.filter(f=>f.status==='Presente').length, falt=regs.filter(f=>f.status==='Faltou').length;
   const alarmes=(db.alarmes||[]), pend=alarmes.filter(a=>a.status!=='resolvido').length;
   const ind=indicadoresDadosGerais();
-  $('dadosArea').innerHTML=`<h3>Resumo Geral — Radar Social Escolar 3.4</h3>
+  $('dadosArea').innerHTML=`<h3>Resumo Geral — Radar Social Escolar 3.5</h3>
   <p><b>Gerado por:</b> ${$('usuarioAtivoTopo')?.textContent||'-'} • <b>Mês:</b> ${m}</p>
   ${dashboardsDadosHTML(ind)}
   <table><tr><th>Indicador</th><th>Resultado</th></tr>
@@ -1063,3 +1064,7 @@ function exportar(){const blob=new Blob([JSON.stringify(db,null,2)],{type:'appli
 function importar(e){const file=e.target.files[0];if(!file)return;const fr=new FileReader();fr.onload=()=>{try{db=JSON.parse(fr.result);save();renderAll();toast('Backup importado.')}catch(err){toast('Arquivo inválido.')}};fr.readAsText(file)}
 function resetar(){if(!confirm('Reiniciar dados de teste do Radar Social Escolar 2.0? O 9º ano ficará em atenção, uma turma com poucas faltas e outras em nível médio.'))return;localStorage.removeItem(STORAGE_KEY);db={alunos:gerarAlunos(),frequencias:[],acoes:[],familia:[]};popularTeste(db);save();renderAll();toast('Dados de teste reiniciados.')}
 init();
+
+/* Fallback global para navegador mobile */
+window.entrarSistema = entrarSistema;
+window.sairSistema = sairSistema;

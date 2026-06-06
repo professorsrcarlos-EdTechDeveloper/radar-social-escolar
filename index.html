@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-  <title>Radar Social Escolar 3.4 — Login Corrigido</title>
+  <title>Radar Social Escolar 3.5 — Login Direto</title>
   <script>
     (function(){
       var isMobile = /Android|iPhone|iPad|iPod|Mobile|SamsungBrowser|Opera Mini|IEMobile/i.test(navigator.userAgent);
@@ -27,7 +27,7 @@
           <span class="radar-dot d3"></span>
         </div>
       </div>
-      <h2>Radar Social Escolar 3.4</h2>
+      <h2>Radar Social Escolar 3.5</h2>
       <p>Sistema de Busca Ativa, Orientação Social e Gestão de Casos</p>
 
       <label>Perfil / usuário
@@ -39,12 +39,10 @@
         </select>
       </label>
 
-      <label>Senha de teste
-        <input id="loginSenha" type="password" placeholder="Digite: 1234">
-      </label>
+      <input id="loginSenha" type="hidden" value="1234">
 
-      <button id="btnEntrarSistema" class="btn-sisme sisme-primary" type="button">Entrar no sistema</button>
-      <small>Versão demonstrativa 3.4. Senha padrão de teste: <strong>1234</strong></small>
+      <button id="btnEntrarSistema" onclick="entrarSistema()" class="btn-sisme sisme-primary" type="button">Entrar no sistema</button>
+      <small>Versão demonstrativa 3.5. Login direto para teste no celular.</small>
     </div>
   </div>
   <header class="topbar">
@@ -60,7 +58,7 @@
         <span class="radar-dot d3"></span>
       </div>
       <div>
-        <h1>Radar Social Escolar 3.4</h1>
+        <h1>Radar Social Escolar 3.5</h1>
         <p>Busca Ativa, Orientação Social, Rede de Proteção e Gestão de Casos</p>
       </div>
     </div>
