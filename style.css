@@ -516,3 +516,105 @@ html.mobile-forcado .login-card small{
     border-radius:16px!important;
   }
 }
+
+/* v3.3 - Login sem modal/fixed: solução definitiva para celular */
+body:not(.logado) .topbar,
+body:not(.logado) .app,
+body:not(.logado) .alerta-flutuante{
+  display:none!important;
+}
+body.logado .login-overlay{
+  display:none!important;
+}
+body:not(.logado){
+  overflow:auto!important;
+  min-height:100vh!important;
+  min-height:100dvh!important;
+}
+.login-overlay{
+  position:relative!important;
+  inset:auto!important;
+  left:auto!important;
+  top:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-height:100vh!important;
+  min-height:100dvh!important;
+  height:auto!important;
+  display:block!important;
+  overflow:visible!important;
+  padding:10px!important;
+  box-sizing:border-box!important;
+  background:radial-gradient(circle at top,#10243c 0,#071322 45%,#050b16 100%)!important;
+}
+.login-card{
+  position:relative!important;
+  left:auto!important;
+  top:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  transform:none!important;
+  width:min(430px,100%)!important;
+  max-width:430px!important;
+  min-width:0!important;
+  margin:0 auto!important;
+  padding:18px!important;
+  border-radius:18px!important;
+  box-sizing:border-box!important;
+  overflow:visible!important;
+}
+.login-card select,
+.login-card input,
+.login-card button{
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+@media(max-width:700px), (pointer:coarse){
+  .login-overlay{
+    padding:8px!important;
+  }
+  .login-card{
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+    padding:14px!important;
+    border-radius:16px!important;
+  }
+  .login-logo,
+  .login-permissao-info{
+    display:none!important;
+  }
+  .login-card h2{
+    font-size:20px!important;
+    line-height:1.12!important;
+    margin:0 0 4px!important;
+  }
+  .login-card p{
+    font-size:12px!important;
+    line-height:1.25!important;
+    margin:0 0 8px!important;
+  }
+  .login-card label{
+    font-size:12px!important;
+    margin-bottom:8px!important;
+  }
+  .login-card input,
+  .login-card select{
+    padding:9px 10px!important;
+    font-size:14px!important;
+    margin-top:4px!important;
+  }
+  .login-card .btn-sisme{
+    padding:11px 12px!important;
+    font-size:14px!important;
+    margin-top:4px!important;
+  }
+  .login-card small{
+    font-size:11px!important;
+    line-height:1.25!important;
+    margin-top:8px!important;
+  }
+}

@@ -855,8 +855,8 @@ function configurarLogin(){
   if(sessao && USUARIOS_SISTEMA[sessao]){
     aplicarUsuario(sessao);
   }else{
+    document.body.classList.remove('logado');
     if($('loginOverlay')) $('loginOverlay').style.display='block';
-    aplicarLoginMobileDefinitivo();
   }
   atualizarInfoLogin();
   if($('loginUsuario')) $('loginUsuario').onchange=atualizarInfoLogin;
@@ -869,10 +869,11 @@ function entrarSistema(){
   if(senha!=='1234') return toast('Senha incorreta. Use 1234 na versão de teste.');
   localStorage.setItem('radarSessaoAtiva',user);
   aplicarUsuario(user);
-  toast('Acesso liberado: '+USUARIOS_SISTEMA[user].perfil);
+  window.scrollTo(0,0); toast('Acesso liberado: '+USUARIOS_SISTEMA[user].perfil);
 }
 function aplicarUsuario(user){
   const u=USUARIOS_SISTEMA[user]||USUARIOS_SISTEMA.secretaria;
+  document.body.classList.add('logado');
   if($('loginOverlay')) $('loginOverlay').style.display='none';
   if($('usuarioAtivoTopo')) $('usuarioAtivoTopo').textContent=`${u.perfil} — ${u.nome}`;
   if($('permissaoTopo')) $('permissaoTopo').textContent=u.acesso==='total'?'Acesso total':'Visualização necessária';
@@ -881,7 +882,7 @@ function aplicarUsuario(user){
 function sairSistema(){
   localStorage.removeItem('radarSessaoAtiva');
   if($('loginSenha')) $('loginSenha').value='';
-  if($('loginOverlay')) $('loginOverlay').style.display='block'; aplicarLoginMobileDefinitivo();
+  document.body.classList.remove('logado'); if($('loginOverlay')) $('loginOverlay').style.display='block';
 }
 function linhaCSV(vals){
   return vals.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(';');
