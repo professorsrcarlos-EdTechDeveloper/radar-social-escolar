@@ -379,3 +379,108 @@ html,body{
     padding:12px!important;
   }
 }
+
+/* v3.1: correção para celular em modo desktop/viewport largo */
+html.mobile-forcado,
+html.mobile-forcado body{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  overflow-x:hidden!important;
+}
+
+html.mobile-forcado .login-overlay{
+  position:fixed!important;
+  inset:auto!important;
+  left:0!important;
+  top:0!important;
+  right:0!important;
+  bottom:0!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  height:100dvh!important;
+  min-height:100dvh!important;
+  display:block!important;
+  place-items:unset!important;
+  align-items:unset!important;
+  justify-items:unset!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  padding:8px!important;
+  margin:0!important;
+  transform:none!important;
+  box-sizing:border-box!important;
+}
+
+html.mobile-forcado .login-card{
+  position:relative!important;
+  display:block!important;
+  left:0!important;
+  top:0!important;
+  right:auto!important;
+  transform:none!important;
+  width:calc(100vw - 16px)!important;
+  max-width:calc(100vw - 16px)!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:14px!important;
+  border-radius:16px!important;
+  overflow:visible!important;
+  box-sizing:border-box!important;
+}
+
+html.mobile-forcado .login-card *,
+html.mobile-forcado .login-card select,
+html.mobile-forcado .login-card input,
+html.mobile-forcado .login-card button{
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+
+html.mobile-forcado .login-card select,
+html.mobile-forcado .login-card input,
+html.mobile-forcado .login-card button{
+  width:100%!important;
+}
+
+html.mobile-forcado .login-logo,
+html.mobile-forcado .login-permissao-info{
+  display:none!important;
+}
+
+html.mobile-forcado .login-card h2{
+  font-size:20px!important;
+  line-height:1.12!important;
+  margin:0 0 4px!important;
+}
+
+html.mobile-forcado .login-card p{
+  font-size:12px!important;
+  line-height:1.25!important;
+  margin:0 0 8px!important;
+}
+
+html.mobile-forcado .login-card label{
+  font-size:12px!important;
+  margin-bottom:8px!important;
+}
+
+html.mobile-forcado .login-card input,
+html.mobile-forcado .login-card select{
+  padding:9px 10px!important;
+  font-size:14px!important;
+  margin-top:4px!important;
+}
+
+html.mobile-forcado .login-card .btn-sisme{
+  padding:11px 12px!important;
+  font-size:14px!important;
+  margin-top:4px!important;
+}
+
+html.mobile-forcado .login-card small{
+  font-size:11px!important;
+  line-height:1.25!important;
+  margin-top:8px!important;
+}
