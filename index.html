@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Radar Social Escolar 2.4 — Login e Impressão de Dados</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="loginOverlay" class="login-overlay">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="radar-logo login-radar" aria-label="Radar">
+          <span class="radar-sweep"></span>
+          <span class="radar-ring r1"></span>
+          <span class="radar-ring r2"></span>
+          <span class="radar-line h"></span>
+          <span class="radar-line v"></span>
+          <span class="radar-dot d1"></span>
+          <span class="radar-dot d2"></span>
+          <span class="radar-dot d3"></span>
+        </div>
+      </div>
+      <h2>Radar Social Escolar 2.4</h2>
+      <p>Sistema de Busca Ativa, Orientação Social e Gestão de Casos</p>
+
+      <label>Perfil / usuário
+        <select id="loginUsuario">
+          <option value="secretaria">Secretária Escolar — Luciene Leonardo</option>
+          <option value="gestor">Gestor Escolar — Cleilson Paiva</option>
+          <option value="coordenador">Coordenador Pedagógico — Everaldo</option>
+          <option value="orientador">Orientador Social</option>
+        </select>
+      </label>
+
+      <label>Senha de teste
+        <input id="loginSenha" type="password" placeholder="Digite: 1234">
+      </label>
+
+      <button id="btnEntrarSistema" class="btn-sisme sisme-primary" type="button">Entrar no sistema</button>
+      <small>Versão demonstrativa. Senha padrão de teste: <strong>1234</strong></small>
+    </div>
+  </div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="radar-logo" aria-label="Radar de frequência">
+        <span class="radar-sweep"></span>
+        <span class="radar-ring r1"></span>
+        <span class="radar-ring r2"></span>
+        <span class="radar-line h"></span>
+        <span class="radar-line v"></span>
+        <span class="radar-dot d1"></span>
+        <span class="radar-dot d2"></span>
+        <span class="radar-dot d3"></span>
+      </div>
+      <div>
+        <h1>Radar Social Escolar 2.4</h1>
+        <p>Busca Ativa, Orientação Social, Rede de Proteção e Gestão de Casos</p>
+      </div>
+    </div>
+
+    <div class="header-tools">
+      <div class="profile-box active-user-box">
+        <span>Usuário ativo</span>
+        <strong id="usuarioAtivoTopo">Não identificado</strong>
+        <button id="btnSairSistema" class="mini-link" type="button">Sair</button>
+      </div>
+      <button id="btnExportar" class="btn outline">Exportar backup</button>
+      <label class="btn outline file-label">Importar backup <input id="inputImportar" type="file" accept="application/json"></label>
+      <button id="btnReset" class="btn danger">Reiniciar teste</button>
+      <div id="setorAlarmesTopo" class="setor-alarmes-topo" style="display:none">
+        <button id="alertaUrgente" class="alerta-urgente" type="button" title="Abrir Central de Alarmes">
+          <span class="alerta-icon">🚨</span>
+          <span class="alerta-texto">Alarmes</span>
+          <span id="alertaContagem" class="alerta-contagem">0</span>
+        </button>
+        <small id="alertaTopoTexto">Aguardando resolução</small>
+      </div>
+      <img class="logo-lupa" src="logo-lupa.png" alt="Logo lupa">
+    </div>
+  </header>
+
+  <button id="alertaFlutuante" class="alerta-flutuante" style="display:none" type="button" title="Abrir Central de Alarmes">
+    🚨 Alarme urgente
+  </button>
+
+  <div class="app">
+    <aside class="sidebar">
+      <button class="nav active" data-screen="dashboard">Dashboard Executivo</button>
+      <button class="nav" data-screen="frequencia">Lançar Frequência</button>
+      <button class="nav" data-screen="risco">Alunos em Risco</button>
+      <button class="nav" data-screen="acoes">Ações da Escola</button>
+      <button class="nav" data-screen="familia">Família Presente 360</button>
+      <button class="nav" data-screen="fluxo">Fluxo de Busca Ativa</button>
+      <button class="nav" data-screen="plano">Plano de Ação</button>
+      <button class="nav" data-screen="termometro">Termômetro Escolar</button>
+      <button class="nav" data-screen="efetividade">Ação que Funcionou</button>
+      <button class="nav" data-screen="conselho">Conselho Escolar</button>
+      <button class="nav" data-screen="orientador">Orientador Social</button>
+      <button class="nav" data-screen="rede">Rede de Proteção</button>
+      <button class="nav" data-screen="comunicados">Comunicados WhatsApp</button>
+      <button class="nav" data-screen="resumo">Resumo do Caso</button>
+      <button class="nav" data-screen="alarmes">Central de Alarmes</button>
+      <button class="nav" data-screen="dados">Geração e Impressão</button>
+      <button class="nav" data-screen="relatorios">Relatórios</button>
+      <button class="nav" data-screen="alunos">Alunos PQF</button>
+    </aside>
+
+    <main class="main">
+      <section id="dashboard" class="screen active">
+        <div class="screen-head">
+          <div>
+            <h2>Dashboard Executivo</h2>
+            <p>Painel visual para direção, secretaria, coordenação e conselho escolar acompanharem decisões em tempo real.</p>
+          </div>
+          <div class="filters">
+            <label>Data <input id="dashData" type="date"></label>
+            <label>Mês <input id="dashMes" type="month"></label>
+          </div>
+        </div>
+
+        <div id="kpis" class="kpi-grid"></div>
+
+        <div class="dashboard-layout">
+          <div class="panel span2">
+            <div class="panel-head"><h3>Presença por turma — hoje</h3><span>comparação executiva por turma</span></div>
+            <div id="barsTurmas" class="bars"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h3>Situação geral do dia</h3><span>presentes, faltas e justificadas</span></div>
+            <div id="donutDia" class="donut-area"></div>
+          </div>
+
+          <div class="panel span2">
+            <div class="panel-head"><h3>Evolução da presença</h3><span>últimos dias com frequência lançada</span></div>
+            <canvas id="lineChart" width="900" height="285"></canvas>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h3>Mapa de risco</h3><span>alunos por nível de alerta</span></div>
+            <div id="riscoCards" class="risk-grid"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h3>Ranking de atenção</h3><span>turmas que exigem ação</span></div>
+            <div id="rankingTurmas" class="list"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h3>Faltas por motivo</h3><span>principais causas no mês</span></div>
+            <div id="motivosChart" class="bars compact"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h3>Funil da busca ativa</h3><span>da falta ao retorno</span></div>
+            <div id="funilChart" class="funnel"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h3>Presença familiar</h3><span>comparecimento dos responsáveis</span></div>
+            <div id="familiaChart" class="bars compact"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h3>Alunos críticos para intervenção imediata</h3><span>5 ou mais faltas no mês</span></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Aluno</th><th>Turma</th><th>Responsável</th><th>Telefone</th><th>Faltas</th><th>Última ação</th><th>Status</th></tr></thead>
+              <tbody id="tblCriticos"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="frequencia" class="screen">
+        <div class="screen-head"><div><h2>Lançar Frequência</h2><p>Turmas únicas do PQF, do 2º ao 9º ano, com 30 alunos por turma.</p></div></div>
+        <div class="panel">
+          <div class="form-row">
+            <label>Data <input id="freqData" type="date"></label>
+            <label>Turma <select id="freqTurma"></select></label>
+            <button id="btnCarregar" class="btn primary">Carregar turma</button>
+            <button id="btnTodos" class="btn outline">Todos presentes</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Aluno</th><th>Responsável</th><th>Telefone</th><th>Status</th><th>Motivo</th><th>Observação</th></tr></thead>
+              <tbody id="tblFreq"></tbody>
+            </table>
+          </div>
+          <div class="right"><button id="btnSalvarFreq" class="btn success">Salvar frequência</button></div>
+        </div>
+      </section>
+
+      <section id="risco" class="screen">
+        <div class="screen-head"><div><h2>Alunos em Risco</h2><p>Lista automática por quantidade de faltas, histórico e ação rápida.</p></div></div>
+        <div class="panel">
+          <div class="form-row">
+            <label>Mês <input id="riscoMes" type="month"></label>
+            <label>Turma <select id="riscoTurma"></select></label>
+            <button id="btnAtualizarRisco" class="btn primary">Atualizar</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Alerta</th><th>Aluno</th><th>Turma</th><th>Responsável</th><th>Telefone</th><th>Faltas</th><th>Histórico</th><th>Ação</th></tr></thead>
+              <tbody id="tblRisco"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="acoes" class="screen">
+        <div class="screen-head"><div><h2>Ações da Escola</h2><p>Registro das providências tomadas pela escola.</p></div></div>
+        <div class="panel">
+          <div class="form-row">
+            <label>Data <input id="acaoData" type="date"></label>
+            <label>Aluno <select id="acaoAluno"></select></label>
+            <label>Ação <select id="acaoTipo">
+              <option>Contato com família</option><option>Mensagem WhatsApp</option><option>Ligação</option><option>Reunião</option><option>Visita domiciliar</option><option>Encaminhamento ao CRAS</option><option>Encaminhamento ao Conselho Tutelar</option><option>Retorno confirmado</option>
+            </select></label>
+            <label>Status <select id="acaoStatus"><option>Pendente</option><option>Em acompanhamento</option><option>Resolvido</option><option>Encaminhado</option></select></label>
+          </div>
+          <label>Descrição <textarea id="acaoDesc" placeholder="Descreva o contato, orientação, compromisso ou encaminhamento."></textarea></label>
+          <button id="btnSalvarAcao" class="btn success">Salvar ação</button>
+        </div>
+        <div class="panel"><h3>Histórico de ações</h3><div id="listaAcoes" class="timeline"></div></div>
+      </section>
+
+      <section id="familia" class="screen">
+        <div class="screen-head"><div><h2>Família Presente 360</h2><p>Agenda, presença dos responsáveis, compromissos, famílias chamadas e responsáveis prioritários.</p></div></div>
+        <div class="panel">
+          <div class="form-row">
+            <label>Data <input id="famData" type="date"></label>
+            <label>Aluno <select id="famAluno"></select></label>
+            <label>Situação <select id="famStatus"><option>Agendado</option><option>Compareceu</option><option>Não compareceu</option><option>Remarcado</option></select></label>
+          </div>
+          <label>Compromisso assumido <textarea id="famTexto" placeholder="Ex: responsável se comprometeu a acompanhar a saída de casa e justificar ausências."></textarea></label>
+          <button id="btnSalvarFamilia" class="btn success">Salvar registro</button>
+        </div>
+        <div id="familia360Kpis" class="kpi-grid"></div>
+        <div class="panel"><h3>Registros da família</h3><div id="listaFamilia" class="timeline"></div></div>
+        <div class="panel"><h3>Responsáveis prioritários para contato</h3><div id="familiasPrioritarias" class="list"></div></div>
+      </section>
+
+
+
+      <section id="fluxo" class="screen">
+        <div class="screen-head"><div><h2>Fluxo de Busca Ativa</h2><p>Do registro da falta ao retorno do estudante ou encaminhamento para a rede de proteção.</p></div></div>
+        <div id="fluxoKpis" class="kpi-grid"></div>
+        <div class="panel">
+          <div class="panel-head"><h3>Da Falta à Solução</h3><span>prova documental do processo</span></div>
+          <div class="flux-flow">
+            <div class="flow-step"><b>1</b><span>Falta identificada</span></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><b>2</b><span>Família contactada</span></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><b>3</b><span>Motivo registrado</span></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><b>4</b><span>Ação realizada</span></div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step"><b>5</b><span>Retorno / Encaminhamento</span></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h3>Casos prioritários</h3><span>alunos com necessidade de acompanhamento</span></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Aluno</th><th>Turma</th><th>Faltas</th><th>Etapa atual</th><th>Última ação</th><th>Ação sugerida</th></tr></thead>
+              <tbody id="tblFluxo"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="plano" class="screen">
+        <div class="screen-head"><div><h2>Plano de Ação Automático</h2><p>Protocolo sugerido conforme a quantidade de faltas, para orientar escola e orientador social.</p></div></div>
+        <div class="panel"><div id="planoCards" class="plan-grid"></div></div>
+        <div class="panel">
+          <div class="panel-head"><h3>Alunos com ação sugerida</h3><span>baseado nas faltas do mês</span></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Aluno</th><th>Turma</th><th>Faltas</th><th>Nível</th><th>Ação sugerida</th><th>Executar</th></tr></thead>
+              <tbody id="tblPlano"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="termometro" class="screen">
+        <div class="screen-head"><div><h2>Termômetro Escolar</h2><p>Leitura executiva por turma para reunião pedagógica, direção, conselho e acompanhamento social.</p></div></div>
+        <div class="panel">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Turma</th><th>Frequência</th><th>Risco</th><th>Família</th><th>Ações</th><th>Tendência</th><th>Situação</th></tr></thead>
+              <tbody id="tblTermometro"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="efetividade" class="screen">
+        <div class="screen-head"><div><h2>Ação que Funcionou</h2><p>Mostra quais ações tiveram melhor retorno e ajudam a gestão a decidir o que funciona mais.</p></div></div>
+        <div class="panel">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Ação</th><th>Casos</th><th>Retorno confirmado</th><th>Resolvidos</th><th>Efetividade</th></tr></thead>
+              <tbody id="tblEfetividade"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="conselho" class="screen">
+        <div class="screen-head"><div><h2>Relatório para Conselho Escolar</h2><p>Relatório institucional com diagnóstico, providências, resultados, pendências e recomendações.</p></div><button id="btnPrintConselho" class="btn primary">Imprimir relatório</button></div>
+        <div class="panel"><div id="relatorioConselho" class="report"></div></div>
+      </section>
+
+      <section id="orientador" class="screen">
+        <div class="screen-head">
+          <div>
+            <h2>Módulo Orientador Social</h2>
+            <p>Para acompanhamento socioeducativo: atendimento, motivo da ausência, vulnerabilidade, providência e plano de acompanhamento.</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="form-row">
+            <label>Data do atendimento
+              <input id="oriData" type="date">
+            </label>
+            <label>Aluno
+              <select id="oriAluno"></select>
+            </label>
+            <label>Tipo de atendimento
+              <select id="oriTipo">
+                <option>Atendimento individual</option>
+                <option>Escuta do estudante</option>
+                <option>Contato com responsável</option>
+                <option>Mediação escola-família</option>
+                <option>Orientação socioeducativa</option>
+                <option>Acompanhamento de frequência</option>
+                <option>Apoio em situação de vulnerabilidade</option>
+              </select>
+            </label>
+            <label>Prioridade
+              <select id="oriPrioridade">
+                <option>Baixa</option>
+                <option>Média</option>
+                <option>Alta</option>
+                <option>Urgente</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="form-row">
+            <label>Motivo principal
+              <select id="oriMotivo">
+                <option>Faltas recorrentes</option>
+                <option>Risco de evasão</option>
+                <option>Desmotivação escolar</option>
+                <option>Conflito familiar</option>
+                <option>Conflito na escola</option>
+                <option>Transporte escolar</option>
+                <option>Saúde</option>
+                <option>Vulnerabilidade social</option>
+                <option>Trabalho infantil / sobrecarga familiar</option>
+                <option>Outros</option>
+              </select>
+            </label>
+            <label>Situação atual
+              <select id="oriSituacao">
+                <option>Em acompanhamento</option>
+                <option>Família contactada</option>
+                <option>Aluno retornou</option>
+                <option>Aguardando responsável</option>
+                <option>Precisa de encaminhamento</option>
+                <option>Caso resolvido</option>
+              </select>
+            </label>
+          </div>
+
+          <label>Registro do atendimento
+            <textarea id="oriDescricao" placeholder="Descreva o que foi observado, a fala do aluno/responsável, a orientação dada e o encaminhamento combinado."></textarea>
+          </label>
+
+          <label>Plano de acompanhamento
+            <textarea id="oriPlano" placeholder="Ex: acompanhar frequência por 15 dias, ligar para responsável na próxima falta, agendar reunião, verificar transporte, encaminhar ao CRAS se persistir."></textarea>
+          </label>
+
+          <button id="btnSalvarOrientador" class="btn success">Salvar atendimento social</button>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Atendimentos e acompanhamentos sociais</h3>
+            <span>histórico para orientador social e escola</span>
+          </div>
+          <div id="listaOrientador" class="timeline"></div>
+        </div>
+      </section>
+
+      <section id="rede" class="screen">
+        <div class="screen-head">
+          <div>
+            <h2>Rede de Proteção</h2>
+            <p>Registro de visitas, encaminhamentos e retornos envolvendo CRAS, CREAS, Conselho Tutelar, Saúde, Transporte e Secretaria.</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="form-row">
+            <label>Data
+              <input id="redeData" type="date">
+            </label>
+            <label>Aluno
+              <select id="redeAluno"></select>
+            </label>
+            <label>Tipo de registro
+              <select id="redeTipo">
+                <option>Visita domiciliar</option>
+                <option>Encaminhamento ao CRAS</option>
+                <option>Encaminhamento ao CREAS</option>
+                <option>Encaminhamento ao Conselho Tutelar</option>
+                <option>Encaminhamento à Unidade de Saúde</option>
+                <option>Transporte escolar</option>
+                <option>Secretaria de Educação</option>
+                <option>Retorno da rede</option>
+              </select>
+            </label>
+            <label>Status
+              <select id="redeStatus">
+                <option>Aberto</option>
+                <option>Encaminhado</option>
+                <option>Aguardando retorno</option>
+                <option>Em acompanhamento</option>
+                <option>Resolvido</option>
+              </select>
+            </label>
+          </div>
+
+          <label>Descrição / encaminhamento
+            <textarea id="redeDescricao" placeholder="Registre o motivo, órgão acionado, responsável pelo atendimento e retorno esperado."></textarea>
+          </label>
+
+          <button id="btnSalvarRede" class="btn success">Salvar registro da rede</button>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Histórico da rede de proteção</h3>
+            <span>casos abertos, encaminhados e resolvidos</span>
+          </div>
+          <div id="listaRede" class="timeline"></div>
+        </div>
+      </section>
+
+
+      <section id="comunicados" class="screen">
+        <div class="screen-head">
+          <div>
+            <h2>Comunicados WhatsApp</h2>
+            <p>Gere mensagens prontas para responsáveis, copie e registre como ação da escola/orientador social.</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="form-row">
+            <label>Aluno
+              <select id="comAluno"></select>
+            </label>
+            <label>Tipo de comunicado
+              <select id="comTipo">
+                <option>Alerta de faltas</option>
+                <option>Convite para reunião</option>
+                <option>Atualização de contato</option>
+                <option>Retorno positivo</option>
+                <option>Encaminhamento / acompanhamento</option>
+              </select>
+            </label>
+            <button id="btnGerarComunicado" class="btn primary" type="button">Gerar mensagem</button>
+            <button id="btnCopiarComunicado" class="btn success" type="button">Copiar WhatsApp</button>
+            <button id="btnRegistrarComunicado" class="btn outline" type="button">Registrar como ação</button>
+          </div>
+
+          <label>Mensagem pronta
+            <textarea id="comTexto" placeholder="A mensagem será gerada aqui."></textarea>
+          </label>
+        </div>
+
+        <div class="panel">
+          <h3>Orientação de uso</h3>
+          <p>Use este módulo para padronizar a comunicação com a família. Depois de copiar e enviar pelo WhatsApp, clique em <strong>Registrar como ação</strong> para o histórico do aluno ficar documentado.</p>
+        </div>
+      </section>
+
+      <section id="resumo" class="screen">
+        <div class="screen-head">
+          <div>
+            <h2>Resumo do Caso</h2>
+            <p>Resumo individual para orientação social, direção, reunião com família, conselho escolar ou encaminhamento à rede de proteção.</p>
+          </div>
+          <button id="btnPrintResumo" class="btn primary" type="button">Imprimir resumo</button>
+        </div>
+
+        <div class="panel">
+          <div class="form-row">
+            <label>Aluno
+              <select id="resAluno"></select>
+            </label>
+            <button id="btnGerarResumo" class="btn success" type="button">Gerar resumo</button>
+          </div>
+
+          <div id="resumoCasoArea" class="report"></div>
+        </div>
+      </section>
+
+
+      <section id="alarmes" class="screen">
+        <div class="screen-head">
+          <div>
+            <h2>Central de Alarmes</h2>
+            <p>Alarmes urgentes, visualização, resolução e histórico completo com busca por data ou nome.</p>
+          </div>
+        </div>
+
+        <div id="alarmesKpis" class="kpi-grid"></div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Disparar novo alarme</h3>
+            <span>para casos urgentes ou prioritários</span>
+          </div>
+          <div class="form-row">
+            <label>Aluno
+              <select id="alarmeAluno"></select>
+            </label>
+            <label>Tipo
+              <select id="alarmeTipo">
+                <option>Urgente</option>
+                <option>Busca ativa</option>
+                <option>Frequência crítica</option>
+                <option>Rede de proteção</option>
+                <option>Família sem retorno</option>
+              </select>
+            </label>
+            <label>Título
+              <input id="alarmeTitulo" type="text" placeholder="Ex: 9º Ano U com risco de evasão">
+            </label>
+          </div>
+          <label>Descrição
+            <textarea id="alarmeDescricao" placeholder="Descreva o motivo do alarme, urgência e providência necessária."></textarea>
+          </label>
+          <button id="btnDispararAlarme" class="btn danger" type="button">Disparar alarme</button>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Busca e histórico de alarmes</h3>
+            <span>todos os alarmes disparados ficam registrados</span>
+          </div>
+          <div class="form-row">
+            <label>Buscar por nome do aluno
+              <input id="filtroAlarmeNome" type="text" placeholder="Digite nome do aluno">
+            </label>
+            <label>Buscar por data
+              <input id="filtroAlarmeData" type="date">
+            </label>
+            <button id="btnBuscarAlarmes" class="btn primary" type="button">Buscar</button>
+            <button id="btnLimparBuscaAlarmes" class="btn outline" type="button">Limpar busca</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Data</th><th>Aluno</th><th>Turma</th><th>Título</th><th>Tipo</th><th>Status</th><th>Visualização</th><th>Resolução</th><th>Ações</th></tr>
+              </thead>
+              <tbody id="tblAlarmes"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+
+      <section id="dados" class="screen">
+        <div class="screen-head">
+          <div>
+            <h2>Geração e Impressão de Dados</h2>
+            <p>Central para gerar, visualizar, exportar CSV e imprimir dados da frequência, alunos, alarmes, ações, família, orientação social e rede.</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="form-row">
+            <label>Tipo de dados
+              <select id="dadosTipo">
+                <option value="frequencia">Frequência</option>
+                <option value="alunos">Alunos</option>
+                <option value="alarmes">Alarmes</option>
+                <option value="acoes">Ações da Escola</option>
+                <option value="familia">Família Presente</option>
+                <option value="orientador">Orientador Social</option>
+                <option value="rede">Rede de Proteção</option>
+                <option value="completo">Resumo Geral</option>
+              </select>
+            </label>
+            <label>Data inicial
+              <input id="dadosInicio" type="date">
+            </label>
+            <label>Data final
+              <input id="dadosFim" type="date">
+            </label>
+            <label>Turma
+              <select id="dadosTurma"></select>
+            </label>
+            <label>Aluno
+              <select id="dadosAluno"></select>
+            </label>
+          </div>
+
+          <div class="sisme-actions">
+            <button id="btnGerarDados" class="btn-sisme sisme-primary" type="button">Gerar dados</button>
+            <button id="btnImprimirDados" class="btn-sisme sisme-secondary" type="button">Imprimir</button>
+            <button id="btnExportarCSV" class="btn-sisme sisme-success" type="button">Exportar CSV</button>
+            <button id="btnLimparDadosTela" class="btn-sisme sisme-dark" type="button">Limpar tela</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div id="dadosArea" class="report"></div>
+        </div>
+      </section>
+
+      <section id="relatorios" class="screen">
+        <div class="screen-head"><div><h2>Relatórios</h2><p>Semanal, mensal, por aluno, por turma, por motivo e por ação realizada.</p></div><button id="btnPrint" class="btn primary">Imprimir</button></div>
+        <div class="panel">
+          <div class="form-row">
+            <label>Início <input id="relInicio" type="date"></label>
+            <label>Fim <input id="relFim" type="date"></label>
+            <label>Turma <select id="relTurma"></select></label>
+            <label>Aluno <select id="relAluno"></select></label>
+            <button id="btnRel" class="btn success">Gerar relatório</button>
+          </div>
+          <div id="relatorioArea" class="report"></div>
+        </div>
+      </section>
+
+      <section id="alunos" class="screen">
+        <div class="screen-head">
+          <div>
+            <h2>Alunos PQF</h2>
+            <p>A lista abre em branco. Selecione uma turma do 2º ao 9º ano para visualizar os alunos e abrir a ficha individual.</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="alunos-toolbar">
+            <div class="turma-picker">
+              <button id="btnTurmas" class="btn primary" type="button">Visualizar turma ▾</button>
+              <div id="menuTurmas" class="turma-menu"></div>
+            </div>
+
+            <div class="aluno-search-box">
+              <label>Pesquisar aluno aberto
+                <input id="buscaAluno" type="text" placeholder="Clique no nome de um aluno ou digite para localizar">
+              </label>
+            </div>
+
+            <button id="btnLimparAlunos" class="btn outline" type="button">Limpar visualização</button>
+          </div>
+
+          <div id="alunosHint" class="empty-state">
+            Escolha uma turma no botão <strong>Visualizar turma</strong>. Exemplo: 2º Ano U, 3º Ano U, 4º Ano U, 5º Ano U, 6º Ano U, 7º Ano U, 8º Ano U ou 9º Ano U.
+          </div>
+
+          <div id="alunosTurmaInfo" class="turma-info" style="display:none"></div>
+
+          <div class="table-wrap alunos-table-wrap" id="alunosTableWrap" style="display:none">
+            <table>
+              <thead><tr><th>Aluno</th><th>Turma</th><th>Responsável principal</th><th>Telefone</th><th>Status</th></tr></thead>
+              <tbody id="tblAlunos"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="fichaAlunoPanel" class="panel ficha-panel" style="display:none">
+          <div class="panel-head">
+            <div>
+              <h3>Ficha rápida do aluno</h3>
+              <span>Dados para contato e referência familiar</span>
+            </div>
+            <button id="btnFecharFicha" class="btn outline" type="button">Fechar ficha</button>
+          </div>
+
+          <div id="fichaAlunoConteudo"></div>
+
+          <div class="contact-form">
+            <h3>Adicionar contato alternativo</h3>
+            <div class="form-row">
+              <label>Referência do contato
+                <input id="novoContatoReferencia" type="text" placeholder="Ex: vó, tia, vizinha, irmão, padrinho">
+              </label>
+              <label>Nome do contato
+                <input id="novoContatoNome" type="text" placeholder="Nome da pessoa">
+              </label>
+              <label>Número de contato
+                <input id="novoContatoTelefone" type="text" placeholder="(88) 99999-9999">
+              </label>
+              <button id="btnAdicionarContato" class="btn success" type="button">Adicionar contato</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Adicionar novo aluno</h3>
+          <div class="form-row">
+            <label>Nome <input id="cadNome" type="text"></label>
+            <label>Turma <input id="cadTurma" type="text" placeholder="Ex: 9º Ano U"></label>
+            <label>Responsável <input id="cadResp" type="text"></label>
+            <label>Telefone <input id="cadTel" type="text"></label>
+            <button id="btnAddAluno" class="btn success">Adicionar</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="script.js"></script>
+</body>
+</html>
