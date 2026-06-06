@@ -801,3 +801,205 @@ body.logado .login-overlay{
   .login-card p{font-size:12px!important;margin:0 0 10px!important}
   .login-card select{font-size:16px!important;padding:12px!important}
 }
+
+
+/* =========================================================
+   V3.6 — CORREÇÃO DE ESTOURO LATERAL NO CELULAR
+   Problema: depois do login, tabelas/cards com min-width grande
+   aumentavam a largura do body. A página ficava gigante para a
+   direita. Agora apenas as tabelas rolam dentro do próprio bloco.
+   ========================================================= */
+html, body{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  overflow-x:hidden!important;
+}
+
+body.logado{
+  width:100%!important;
+  max-width:100%!important;
+  overflow-x:hidden!important;
+}
+
+.app,
+.main,
+.content,
+.screen,
+.panel,
+.screen.active{
+  min-width:0!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+
+.table-wrap{
+  width:100%!important;
+  max-width:100%!important;
+  overflow-x:auto!important;
+  overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;
+}
+
+.table-wrap table{
+  width:max-content;
+  min-width:720px;
+}
+
+.report{
+  max-width:100%!important;
+  overflow-x:auto!important;
+}
+
+.report table{
+  width:max-content;
+  min-width:640px;
+}
+
+/* Mobile real */
+@media(max-width:900px), (pointer:coarse){
+  body.logado{
+    overflow-x:hidden!important;
+  }
+
+  .app{
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-height:auto!important;
+    overflow-x:hidden!important;
+  }
+
+  .sidebar{
+    width:100%!important;
+    max-width:100%!important;
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+    padding:8px!important;
+    overflow:hidden!important;
+  }
+
+  .nav{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    padding:11px 9px!important;
+    font-size:12px!important;
+    white-space:normal!important;
+    line-height:1.2!important;
+  }
+
+  .main{
+    width:100%!important;
+    max-width:100%!important;
+    padding:10px!important;
+    overflow-x:hidden!important;
+  }
+
+  .topbar{
+    width:100%!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+  }
+
+  .header-tools{
+    width:100%!important;
+    max-width:100%!important;
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:6px!important;
+  }
+
+  .header-tools .btn,
+  .header-tools .file-label,
+  .header-tools .profile-box,
+  .header-tools .active-user-box,
+  .header-tools .setor-alarmes-topo{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+
+  .logo-lupa{
+    display:none!important;
+  }
+
+  .kpi-grid,
+  .dashboard-layout,
+  .executive-grid,
+  .grid-2,
+  .dados-dashboard-grid,
+  .plan-grid,
+  .risk-grid,
+  .ficha-grid,
+  .contatos-list{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    width:100%!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+  }
+
+  .panel{
+    width:100%!important;
+    max-width:100%!important;
+    padding:12px!important;
+    overflow:hidden!important;
+  }
+
+  .screen-head{
+    width:100%!important;
+    max-width:100%!important;
+  }
+
+  .screen-head h2{
+    font-size:22px!important;
+    line-height:1.15!important;
+  }
+
+  .form-row,
+  .filters,
+  .alunos-toolbar,
+  .sisme-actions{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    width:100%!important;
+    max-width:100%!important;
+  }
+
+  input, select, textarea, button, .btn, .btn-sisme{
+    max-width:100%!important;
+  }
+
+  .bar-row,
+  .compact .bar-row,
+  .dados-mini-row{
+    grid-template-columns:82px minmax(0,1fr) 44px!important;
+    gap:6px!important;
+  }
+
+  canvas{
+    max-width:100%!important;
+  }
+
+  .alerta-flutuante{
+    max-width:calc(100vw - 24px)!important;
+    right:12px!important;
+    left:auto!important;
+  }
+}
+
+@media(max-width:520px), (pointer:coarse){
+  .sidebar{
+    grid-template-columns:1fr!important;
+  }
+
+  .table-wrap table{
+    min-width:650px;
+  }
+
+  .report table{
+    min-width:620px;
+  }
+}

@@ -233,10 +233,10 @@ function openScreen(idS){
 
   const main = document.querySelector('.main');
   if(main) main.scrollTop = 0;
-  window.scrollTo({top:0, left:0, behavior:'auto'});
+  window.scrollTo({top:0, left:0, behavior:'auto'}); corrigirEstouroHorizontal();
   requestAnimationFrame(()=>{
     if(main) main.scrollTop = 0;
-    window.scrollTo({top:0, left:0, behavior:'auto'});
+    window.scrollTo({top:0, left:0, behavior:'auto'}); corrigirEstouroHorizontal();
   });
 }
 function renderAll(){preencherSelects();renderDashboard();renderFreq();renderRisco();renderAcoes();renderFamilia();renderFluxo();renderPlano();renderTermometro();renderEfetividade();renderConselho();renderOrientador();renderRede();renderAlarmes();atualizarSetorAlarmes();renderAlunos();relatorio(false);aplicarPermissoesVisuais();}
@@ -1010,7 +1010,7 @@ function gerarDadosTela(){
   const dados=dadosFiltrados(tipo);
   const titulo=$('dadosTipo').options[$('dadosTipo').selectedIndex].text;
   const ind=indicadoresDadosGerais();
-  let html=`<h3>${titulo} — Radar Social Escolar 3.5</h3><div class="perfil-alerta"><b>Perfil:</b> ${$('usuarioAtivoTopo')?.textContent||'-'}<br><b>Permissão:</b> ${usuarioAtual()?.permissao||'-'}</div><p><b>Data:</b> ${fmt(hoje)}</p>${dashboardsDadosHTML(ind)}`;
+  let html=`<h3>${titulo} — Radar Social Escolar 3.6</h3><div class="perfil-alerta"><b>Perfil:</b> ${$('usuarioAtivoTopo')?.textContent||'-'}<br><b>Permissão:</b> ${usuarioAtual()?.permissao||'-'}</div><p><b>Data:</b> ${fmt(hoje)}</p>${dashboardsDadosHTML(ind)}`;
   if(tipo==='alunos'){
     html+=`<table><tr><th>Aluno</th><th>Turma</th><th>Responsável</th><th>Telefone</th><th>Contatos</th></tr>${dados.map(a=>`<tr><td>${a.nome}</td><td>${a.turma}</td><td>${a.responsavel||'-'}</td><td>${a.telefone||'-'}</td><td>${(a.contatos||[]).length}</td></tr>`).join('')||'<tr><td colspan="5">Sem dados.</td></tr>'}</table>`;
   }else{
@@ -1023,7 +1023,7 @@ function gerarResumoGeralDados(){
   const regs=regsMes(m), pres=regs.filter(f=>f.status==='Presente').length, falt=regs.filter(f=>f.status==='Faltou').length;
   const alarmes=(db.alarmes||[]), pend=alarmes.filter(a=>a.status!=='resolvido').length;
   const ind=indicadoresDadosGerais();
-  $('dadosArea').innerHTML=`<h3>Resumo Geral — Radar Social Escolar 3.5</h3>
+  $('dadosArea').innerHTML=`<h3>Resumo Geral — Radar Social Escolar 3.6</h3>
   <p><b>Gerado por:</b> ${$('usuarioAtivoTopo')?.textContent||'-'} • <b>Mês:</b> ${m}</p>
   ${dashboardsDadosHTML(ind)}
   <table><tr><th>Indicador</th><th>Resultado</th></tr>
@@ -1057,7 +1057,7 @@ function exportarCSV(){
     csv=[linhaCSV(['Data','Aluno','Turma','Tipo/Status','Descrição'])].concat(dados.map(x=>{const a=aluno(x.alunoId);return linhaCSV([fmt(x.data),a?.nome||'',a?.turma||'',x.status||x.tipo||x.presenca||x.situacao||x.prioridade||'',x.descricao||x.compromisso||x.titulo||x.motivo||x.obs||''])})).join('\n');
   }
   const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`radar-social-3-4-${tipo}-${hoje}.csv`;a.click();URL.revokeObjectURL(a.href);
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`radar-social-3-6-${tipo}-${hoje}.csv`;a.click();URL.revokeObjectURL(a.href);
 }
 
 function exportar(){const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='backup-radar-social-escolar-3-4.json';a.click();URL.revokeObjectURL(a.href)}
@@ -1068,3 +1068,14 @@ init();
 /* Fallback global para navegador mobile */
 window.entrarSistema = entrarSistema;
 window.sairSistema = sairSistema;
+
+
+/* v3.6 — trava contra deslocamento horizontal no celular */
+function corrigirEstouroHorizontal(){
+  document.documentElement.scrollLeft = 0;
+  document.body.scrollLeft = 0;
+  window.scrollTo(0, window.scrollY || 0);
+}
+window.addEventListener('load', corrigirEstouroHorizontal);
+window.addEventListener('resize', corrigirEstouroHorizontal);
+setInterval(corrigirEstouroHorizontal, 1200);
