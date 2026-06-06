@@ -786,12 +786,77 @@ function atualizarInfoLogin(){
   if($('loginPermissaoInfo')) $('loginPermissaoInfo').innerHTML=`<strong>${u.perfil} — ${u.nome}</strong><br>${u.permissao}`;
 }
 
+
+function aplicarLoginMobileDefinitivo(){
+  const isMobile = /Android|iPhone|iPad|iPod|Mobile|SamsungBrowser|Opera Mini|IEMobile/i.test(navigator.userAgent) || (navigator.maxTouchPoints && navigator.maxTouchPoints > 1);
+  if(!isMobile) return;
+
+  const overlay = $('loginOverlay');
+  const card = document.querySelector('.login-card');
+  if(!overlay || !card) return;
+
+  const vv = window.visualViewport;
+  const rawWidth = vv && vv.width ? vv.width : Math.min(window.innerWidth || 360, screen.width || 360);
+  const safeWidth = Math.max(280, Math.min(340, Math.floor(rawWidth - 16)));
+  const safeLeft = vv && typeof vv.offsetLeft === 'number' ? Math.max(0, Math.floor(vv.offsetLeft + 8)) : 8;
+  const safeTop = vv && typeof vv.offsetTop === 'number' ? Math.max(0, Math.floor(vv.offsetTop + 8)) : 8;
+
+  overlay.style.setProperty('display','block','important');
+  overlay.style.setProperty('position','fixed','important');
+  overlay.style.setProperty('left','0','important');
+  overlay.style.setProperty('top','0','important');
+  overlay.style.setProperty('right','auto','important');
+  overlay.style.setProperty('bottom','auto','important');
+  overlay.style.setProperty('width','100%','important');
+  overlay.style.setProperty('min-width','0','important');
+  overlay.style.setProperty('max-width','none','important');
+  overlay.style.setProperty('height','100dvh','important');
+  overlay.style.setProperty('overflow-y','auto','important');
+  overlay.style.setProperty('overflow-x','hidden','important');
+  overlay.style.setProperty('padding','8px','important');
+  overlay.style.setProperty('box-sizing','border-box','important');
+  overlay.style.setProperty('place-items','unset','important');
+  overlay.style.setProperty('align-items','unset','important');
+  overlay.style.setProperty('justify-items','unset','important');
+
+  card.style.setProperty('display','block','important');
+  card.style.setProperty('position','fixed','important');
+  card.style.setProperty('left',safeLeft+'px','important');
+  card.style.setProperty('top',safeTop+'px','important');
+  card.style.setProperty('right','auto','important');
+  card.style.setProperty('bottom','auto','important');
+  card.style.setProperty('transform','none','important');
+  card.style.setProperty('width',safeWidth+'px','important');
+  card.style.setProperty('max-width',safeWidth+'px','important');
+  card.style.setProperty('min-width','0','important');
+  card.style.setProperty('margin','0','important');
+  card.style.setProperty('padding','14px','important');
+  card.style.setProperty('box-sizing','border-box','important');
+  card.style.setProperty('overflow','visible','important');
+  card.style.setProperty('border-radius','16px','important');
+
+  const logo = document.querySelector('.login-logo');
+  const info = $('loginPermissaoInfo');
+  if(logo) logo.style.setProperty('display','none','important');
+  if(info) info.style.setProperty('display','none','important');
+
+  card.querySelectorAll('select,input,button').forEach(el=>{
+    el.style.setProperty('width','100%','important');
+    el.style.setProperty('max-width','100%','important');
+    el.style.setProperty('box-sizing','border-box','important');
+  });
+}
+
 function configurarLogin(){
+  aplicarLoginMobileDefinitivo();
+  window.addEventListener('resize',aplicarLoginMobileDefinitivo);
+  if(window.visualViewport){window.visualViewport.addEventListener('resize',aplicarLoginMobileDefinitivo);window.visualViewport.addEventListener('scroll',aplicarLoginMobileDefinitivo);}
   const sessao=localStorage.getItem('radarSessaoAtiva');
   if(sessao && USUARIOS_SISTEMA[sessao]){
     aplicarUsuario(sessao);
   }else{
-    if($('loginOverlay')) $('loginOverlay').style.display='grid';
+    if($('loginOverlay')) $('loginOverlay').style.display='block';
+    aplicarLoginMobileDefinitivo();
   }
   atualizarInfoLogin();
   if($('loginUsuario')) $('loginUsuario').onchange=atualizarInfoLogin;
@@ -816,7 +881,7 @@ function aplicarUsuario(user){
 function sairSistema(){
   localStorage.removeItem('radarSessaoAtiva');
   if($('loginSenha')) $('loginSenha').value='';
-  if($('loginOverlay')) $('loginOverlay').style.display='grid';
+  if($('loginOverlay')) $('loginOverlay').style.display='block'; aplicarLoginMobileDefinitivo();
 }
 function linhaCSV(vals){
   return vals.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(';');

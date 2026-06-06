@@ -484,3 +484,35 @@ html.mobile-forcado .login-card small{
   line-height:1.25!important;
   margin-top:8px!important;
 }
+
+/* v3.2 - login mobile definitivo: nunca centralizar no celular */
+@media (pointer:coarse){
+  .login-overlay{
+    display:block!important;
+    position:fixed!important;
+    left:0!important;
+    top:0!important;
+    right:auto!important;
+    bottom:auto!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    height:100dvh!important;
+    overflow:auto!important;
+    padding:8px!important;
+  }
+  .login-card{
+    display:block!important;
+    position:fixed!important;
+    left:8px!important;
+    top:8px!important;
+    right:auto!important;
+    transform:none!important;
+    width:340px!important;
+    max-width:calc(100vw - 16px)!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:14px!important;
+    border-radius:16px!important;
+  }
+}
